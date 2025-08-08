@@ -1,5 +1,10 @@
-from producto_crud import agregar_producto, leer_productos, eliminar_producto, leer_producto, actualizar_producto, exportar_productos_txt
+from producto_crud import InMemoryProductoRepository
 import os
+
+# Instancia del repositorio que se usará en toda la aplicación.
+# La lógica de negocio (main.py) no sabe cómo se guardan los datos,
+# solo se comunica a través del contrato definido en ProductoRepository.
+repo = InMemoryProductoRepository()
 
 def mostrar_menu():
     """Muestra el menú principal de opciones."""
@@ -17,104 +22,145 @@ def mostrar_menu():
 
 def main():
     """Función principal que ejecuta el sistema de inventario."""
-    # Los productos están precargados directamente en fake_db
-    
     while True:
         mostrar_menu()
         
-        try:
-            opcion = input("Seleccione una opción (1-7): ").strip()
-            
-            # Limpiar pantalla después de seleccionar opción
-            os.system("cls" if os.name == "nt" else "clear")
+        opcion = input("Seleccione una opción (1-7): ").strip()
+        
+        # Limpiar pantalla después de seleccionar opción
+        os.system("cls" if os.name == "nt" else "clear")
 
-            if opcion == "1":
-                print("📦 AGREGAR NUEVO PRODUCTO")
-                print("-" * 30)
-                nombre = input("Nombre del producto: ").strip()
-                if not nombre:
-                    print("❌ El nombre no puede estar vacío.")
+        if opcion == "1":
+            print("📦 AGREGAR NUEVO PRODUCTO")
+            print("-" * 30)
+            nombre = input("Nombre del producto: ").strip()
+            if not nombre:
+                print("❌ El nombre no puede estar vacío.")
+                continue
+                
+            try:
+                precio = float(input("Precio del producto ($): "))
+                stock = int(input("Cantidad en stock: "))
+                if precio < 0 or stock < 0:
+                    print("❌ El precio y stock deben ser valores positivos.")
                     continue
-                    
-                try:
-                    precio = float(input("Precio del producto ($): "))
-                    stock = int(input("Cantidad en stock: "))
-                    if precio < 0 or stock < 0:
-                        print("❌ El precio y stock deben ser valores positivos.")
-                        continue
-                    agregar_producto(nombre, precio, stock)
-                except ValueError:
-                    print("❌ Por favor ingrese valores numéricos válidos.")
                 
-            elif opcion == "2":
-                leer_productos()
-                
-            elif opcion == "3":
-                print("🔍 BUSCAR PRODUCTO")
-                print("-" * 30)
-                try:
-                    id_producto = int(input("ID del producto a buscar: "))
-                    leer_producto(id_producto)
-                except ValueError:
-                    print("❌ Por favor ingrese un ID numérico válido.")
-                
-            elif opcion == "4":
-                print("✏️  ACTUALIZAR PRODUCTO")
-                print("-" * 30)
-                try:
-                    id_producto = int(input("ID del producto a actualizar: "))
-                    
-                    print("\n💡 Deje en blanco los campos que no desea cambiar:")
-                    nuevo_nombre = input("Nuevo nombre (actual se mantiene si vacío): ").strip() or None
-                    
-                    precio_input = input("Nuevo precio (actual se mantiene si vacío): ").strip()
-                    nuevo_precio = float(precio_input) if precio_input else None
-                    
-                    stock_input = input("Nuevo stock (actual se mantiene si vacío): ").strip()
-                    nuevo_stock = int(stock_input) if stock_input else None
-                    
-                    if nuevo_precio is not None and nuevo_precio < 0:
-                        print("❌ El precio debe ser positivo.")
-                        continue
-                    if nuevo_stock is not None and nuevo_stock < 0:
-                        print("❌ El stock debe ser positivo.")
-                        continue
-                        
-                    actualizar_producto(id_producto, nuevo_nombre, nuevo_precio, nuevo_stock)
-                except ValueError:
-                    print("❌ Por favor ingrese valores numéricos válidos.")
-                
-            elif opcion == "5":
-                print("🗑️  ELIMINAR PRODUCTO")
-                print("-" * 30)
-                try:
-                    id_producto = int(input("ID del producto a eliminar: "))
-                    eliminar_producto(id_producto)
-                except ValueError:
-                    print("❌ Por favor ingrese un ID numérico válido.")
-                
-            elif opcion == "6":
-                print("📄 EXPORTAR INVENTARIO")
-                print("-" * 30)
-                nombre_archivo = input("Nombre del archivo (sin extensión): ").strip()
-                if not nombre_archivo:
-                    print("❌ El nombre del archivo no puede estar vacío.")
-                    continue
-                exportar_productos_txt(nombre_archivo)
+                nuevo_producto_data = {"nombre": nombre, "precio": precio, "stock": stock}
+                producto_creado = repo.create(nuevo_producto_data)
+                print(f"✅ Producto agregado con ID {producto_creado['id']}: {producto_creado['nombre']}")
 
-            elif opcion == "7":
-                print("¡Gracias por usar el Sistema de Inventario!")
-                print("🔒 Cerrando aplicación...")
-                break
+            except ValueError:
+                print("❌ Por favor ingrese valores numéricos válidos.")
             
+        elif opcion == "2":
+            print("\n📦 INVENTARIO COMPLETO:")
+            print("-" * 60)
+            productos = repo.get_all()
+            if not productos:
+                print("No hay productos en la base de datos.")
             else:
-                print("❌ Opción no válida. Por favor seleccione una opción del 1 al 7.")
+                for p in productos:
+                    estado_stock = ""
+                    if p['stock'] == 0:
+                        estado_stock = "🔴 SIN STOCK"
+                    elif p['stock'] <= 5:
+                        estado_stock = "🟡 STOCK BAJO"
+                    else:
+                        estado_stock = "🟢 STOCK OK"
+                    print(f"ID: {p['id']} | {p['nombre']} | Precio: ${p['precio']} | Stock: {p['stock']} | {estado_stock}")
+            print("-" * 60)
+            
+        elif opcion == "3":
+            print("🔍 BUSCAR PRODUCTO")
+            print("-" * 30)
+            try:
+                id_producto = int(input("ID del producto a buscar: "))
+                producto = repo.get_by_id(id_producto)
+                if producto:
+                    print("\n📋 DETALLE DEL PRODUCTO:")
+                    print(f"ID: {producto['id']}")
+                    print(f"Nombre: {producto['nombre']}")
+                    print(f"Precio: ${producto['precio']}")
+                    print(f"Stock: {producto['stock']} unidades")
+                else:
+                    print("❌ Producto no encontrado.")
+            except ValueError:
+                print("❌ Por favor ingrese un ID numérico válido.")
+            
+        elif opcion == "4":
+            print("✏️  ACTUALIZAR PRODUCTO")
+            print("-" * 30)
+            try:
+                id_producto = int(input("ID del producto a actualizar: "))
+                producto_existente = repo.get_by_id(id_producto)
+
+                if not producto_existente:
+                    print("❌ Producto no encontrado.")
+                    continue
+
+                print("\n💡 Deje en blanco los campos que no desea cambiar:")
+                nuevo_nombre = input(f"Nuevo nombre (actual: {producto_existente['nombre']}): ").strip() or producto_existente['nombre']
                 
-        except KeyboardInterrupt:
-            print("\n\n👋 ¡Aplicación cerrada por el usuario!")
+                precio_input = input(f"Nuevo precio (actual: {producto_existente['precio']}): ").strip()
+                nuevo_precio = float(precio_input) if precio_input else producto_existente['precio']
+                
+                stock_input = input(f"Nuevo stock (actual: {producto_existente['stock']}): ").strip()
+                nuevo_stock = int(stock_input) if stock_input else producto_existente['stock']
+                
+                if nuevo_precio < 0 or nuevo_stock < 0:
+                    print("❌ El precio y el stock no pueden ser negativos.")
+                    continue
+                    
+                datos_actualizados = {"nombre": nuevo_nombre, "precio": nuevo_precio, "stock": nuevo_stock}
+                repo.update(id_producto, datos_actualizados)
+                print("✅ Producto actualizado correctamente.")
+
+            except ValueError:
+                print("❌ Por favor ingrese valores numéricos válidos.")
+            
+        elif opcion == "5":
+            print("🗑️  ELIMINAR PRODUCTO")
+            print("-" * 30)
+            try:
+                id_producto = int(input("ID del producto a eliminar: "))
+                if repo.delete(id_producto):
+                    print("✅ Producto eliminado correctamente.")
+                else:
+                    print("❌ Producto no encontrado.")
+            except ValueError:
+                print("❌ Por favor ingrese un ID numérico válido.")
+            
+        elif opcion == "6":
+            print("📄 EXPORTAR INVENTARIO")
+            print("-" * 30)
+            nombre_archivo = input("Nombre del archivo (sin extensión): ").strip()
+            if not nombre_archivo:
+                print("❌ El nombre del archivo no puede estar vacío.")
+                continue
+            
+            exportar_directory = "exports-txt"
+            os.makedirs(exportar_directory, exist_ok=True)
+            filepath = os.path.join(exportar_directory, f"{nombre_archivo}.txt")
+
+            try:
+                with open(filepath, "w", encoding="utf-8") as archivo:
+                    archivo.write("REPORTE DE INVENTARIO\n")
+                    archivo.write("=" * 50 + "\n\n")
+                    productos = repo.get_all()
+                    for p in productos:
+                        linea = f"ID: {p['id']} | {p['nombre']} | Precio: ${p['precio']} | Stock: {p['stock']}\n"
+                        archivo.write(linea)
+                print(f"✅ Productos exportados correctamente a {filepath}")
+            except Exception as e:
+                print(f"❌ Error al exportar productos: {e}")
+
+        elif opcion == "7":
+            print("¡Gracias por usar el Sistema de Inventario!")
+            print("🔒 Cerrando aplicación...")
             break
-        except Exception as e:
-            print(f"❌ Error inesperado: {e}")
+            
+        else:
+            print("❌ Opción no válida. Por favor seleccione una opción del 1 al 7.")
             
         # Pausa para que el usuario pueda leer el resultado
         input("\n📱 Presione Enter para continuar...")

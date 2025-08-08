@@ -1,102 +1,72 @@
 # 🛒 Sistema de Gestión de Inventario - Tienda de Hardware
 
-Un sistema completo de gestión de inventario desarrollado en Python para tiendas de hardware tecnológico. Permite realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) sobre productos con control de stock inteligente y sistema de logging para auditoría.
+Un sistema de gestión de inventario desarrollado en Python, diseñado con una arquitectura limpia y escalable. Permite realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) sobre productos, con un enfoque en la separación de responsabilidades y buenas prácticas de desarrollo.
 
-## 📋 Características
+## 📋 Características Principales
 
-- ✅ **Gestión completa de productos** (CRUD)
-- 📊 **Control de stock inteligente** con alertas automáticas
-- 🔍 **Sistema de logging** para auditoría y trazabilidad
-- 📤 **Exportación de reportes** en formato TXT
-- ⚠️ **Alertas de stock bajo** y productos sin stock
-- 🛡️ **Protección contra eliminación accidental** de productos con inventario
-- 🎯 **Datos de ejemplo** preconfigurados para pruebas
+- ✅ **Arquitectura Limpia:** Implementación del **Patrón Repositorio** que separa la lógica de negocio de la capa de acceso a datos.
+- 📦 **Gestión Completa de Productos (CRUD):** Operaciones robustas para manejar el ciclo de vida de los productos.
+- 🔍 **Sistema de Logging:** Todas las operaciones de la base de datos se registran en `operaciones.log` para auditoría.
+- 📤 **Exportación de Reportes:** Genera reportes de inventario en formato `.txt`.
+- ⚠️ **Alertas de Stock:** Indicadores visuales para productos con stock bajo o sin stock.
+- 🛡️ **Protección de Datos:** Lógica para prevenir la eliminación accidental de productos con inventario.
 
 ## 🚀 Instalación
 
-### Requisitos del Sistema
-- Python 3.7 o superior
-- Sistema operativo: Windows, macOS, Linux
+### Requisitos
+- Python 3.9 o superior
 
-### Configuración del Proyecto
+### Pasos de Configuración
 
-1. **Clonar el repositorio**
-   ```bash
-   git clone https://github.com/tu-usuario/hardware-shop.git
-   cd hardware-shop
-   ```
+1.  **Clonar el repositorio:**
+    ```bash
+    git clone https://github.com/devseniorlabpython/hardware-shop.git
+    cd hardware-shop
+    ```
 
-2. **Verificar instalación de Python**
-   ```bash
-   python --version
-   ```
-
-3. **Ejecutar el sistema**
-   ```bash
-   python main.py
-   ```
+2.  **Ejecutar la aplicación:**
+    ```bash
+    python main.py
+    ```
 
 ## 📁 Estructura del Proyecto
 
+La arquitectura del proyecto está diseñada para ser modular y escalable:
+
 ```
 hardware-shop/
-├── README.md                 # Documentación principal
-├── producto_crud.py          # Módulo principal del sistema
-├── main.py                   # Archivo principal de ejecución
+├── main.py                   # Capa de Presentación (Interfaz de Usuario)
+├── producto_crud.py          # Capa de Acceso a Datos (Implementación del Repositorio)
+├── repositorio.py            # Contrato del Repositorio (Interfaz Abstracta)
 ├── operaciones.log           # Archivo de logs (generado automáticamente)
-├── repositorio.py            # Repository Pattern. Contrato que usará producto_crud.py
-├── Contributors.md           # Lista de contribuidores. Primeros pasos para nuevos
-└── .gitignore               # Archivos ignorados por Git
+├── .gitignore                # Archivos ignorados por Git
+└── README.md                 # Documentación del proyecto
 ```
 
-## 🛠️ Uso del Sistema
+## 🛠️ Arquitectura: Patrón Repositorio
 
-### Funciones Principales
+Este proyecto utiliza el Patrón Repositorio para desacoplar la lógica de la aplicación de los detalles de cómo se almacenan los datos.
 
-#### 1. Agregar Producto
-```python
-agregar_producto("NVIDIA RTX 4070", "599.99", 12)
-```
+1.  **`repositorio.py` (El Contrato):**
+    Define la interfaz `ProductoRepository` con métodos abstractos como `get_all()`, `get_by_id()`, `create()`, etc. Cualquier clase que gestione datos *debe* implementar esta interfaz.
 
-#### 2. Consultar Todos los Productos
-```python
-leer_productos()
-```
-**Salida esperada:**
-```
-📦 INVENTARIO COMPLETO:
-------------------------------------------------------------
-ID: 1 | NVIDIA RTX 4070 - Precio: $599.99 - Stock: 12 | 🟢 STOCK OK
-ID: 2 | AMD Ryzen 7 7700X - Precio: $349.99 - Stock: 8 | 🟢 STOCK OK
-------------------------------------------------------------
-```
+2.  **`producto_crud.py` (La Implementación):**
+    Contiene la clase `InMemoryProductoRepository`, que implementa el contrato `ProductoRepository` usando una lista de diccionarios en memoria como si fuera una base de datos.
 
-#### 3. Consultar Producto Específico
-```python
-leer_producto(1)
-```
+3.  **`main.py` (El Cliente):**
+    Interactúa únicamente con una instancia del repositorio a través de los métodos definidos en el contrato. No sabe si los datos vienen de una lista, una base de datos SQL o una API.
 
-#### 4. Actualizar Producto
-```python
-# Actualizar solo el precio
-actualizar_producto(1, nuevo_precio="649.99")
+Esta estructura permite que en el futuro podamos cambiar la fuente de datos (por ejemplo, a una base de datos SQLite) simplemente creando una nueva clase de repositorio, sin tener que modificar `main.py`.
 
-# Actualizar múltiples campos
-actualizar_producto(1, nuevo_nombre="NVIDIA RTX 4070 Ti", nuevo_precio="699.99", nuevo_stock=8)
-```
+## 🤝 Contribuciones
 
-#### 5. Eliminar Producto
-```python
-eliminar_producto(1)
-```
-*Nota: El sistema alertará si el producto tiene stock > 0*
+¡Las contribuciones son bienvenidas! Si eres un estudiante nuevo, aquí tienes algunas ideas para empezar:
 
-#### 6. Exportar Inventario
-```python
-exportar_productos_txt("reporte_mensual")
-```
+1.  **Mejorar la Interfaz:** Implementa una tabla mejor formateada para la lista de productos.
+2.  **Añadir Funcionalidad:** Crea una opción en el menú para ver solo los productos con stock bajo.
+3.  **Mejorar la Documentación:** Añade `docstrings` y `type hints` a las funciones en `main.py`.
 
-### Sistema de Alertas de Stock
+Consulta los issues abiertos en el repositorio para más ideas.
 
 | Estado | Indicador | Descripción |
 |--------|-----------|-------------|

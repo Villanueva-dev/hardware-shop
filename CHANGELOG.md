@@ -14,6 +14,21 @@ y este proyecto adhiere al [Versionado Semántico](https://semver.org/lang/es/).
 - Sistema de autenticación
 - API REST con FastAPI
 
+## [1.1.0] - 2025-08-08
+
+### 🔧 Cambiado
+- **Refactorización Arquitectónica Mayor**: Se ha reestructurado todo el proyecto para implementar el **Patrón de Diseño Repositorio (Repository Pattern)**.
+- La lógica de acceso a datos ahora está completamente encapsulada en la clase `InMemoryProductoRepository` dentro de `producto_crud.py`.
+- La comunicación entre la interfaz de usuario (`main.py`) y la capa de datos ahora se realiza a través del contrato definido en `ProductoRepository`, desacoplando la lógica de negocio de la persistencia.
+- La estructura de datos interna ha sido cambiada de un diccionario de objetos a una **lista de diccionarios**, simulando formatos más cercanos a JSON y APIs.
+
+### ✨ Agregado
+- Nuevo archivo `repositorio.py` que define la interfaz abstracta `ProductoRepository`, estableciendo un contrato para todas las futuras implementaciones de persistencia.
+
+### 🗑️ Removido
+- Eliminada la clase `Producto` y todas las funciones globales de `producto_crud.py` (`agregar_producto`, `leer_productos`, etc.) en favor de los métodos del repositorio.
+- El archivo `operaciones.log` ya no es rastreado por Git.
+
 ## [1.0.0] - 2025-08-06
 
 ### ✨ Agregado
