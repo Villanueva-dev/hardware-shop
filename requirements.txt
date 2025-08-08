@@ -1,0 +1,9 @@
+# Proyecto Sistema de Gestión de Inventario
+# Python 3.7+ requerido
+
+# Dependencias principales (actualmente solo librerías estándar)
+# logging - Sistema de logging (built-in)
+# os - Operaciones del sistema operativo (built-in)
+
+# Nota: El proyecto actualmente no requiere instalación de dependencias externas
+# ya que utiliza únicamente librerías estándar de Python.

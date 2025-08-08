@@ -1,0 +1,11 @@
+@startuml projectm3
+
+class Producto{
+    nombre:str
+    precio:str
+    agregar_producto()
+    eliminar_producto()
+    leer_productos()
+    leer_producto()
+    actualizar_producto()
+}
