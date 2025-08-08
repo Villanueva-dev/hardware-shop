@@ -1,9 +1,0 @@
-REPORTE DE INVENTARIO
-==================================================
-
-ID: 1 | NVIDIA RTX 4070 | Precio: $599.99 | Stock: 12 unidades
-ID: 2 | AMD Ryzen 7 7700X | Precio: $349.99 | Stock: 8 unidades
-ID: 3 | Corsair Vengeance DDR5 32GB | Precio: $199.99 | Stock: 15 unidades
-ID: 4 | ASUS ROG Strix B650-E | Precio: $299.99 | Stock: 3 unidades [STOCK BAJO]
-ID: 5 | Monitor Samsung Odyssey G7 27" | Precio: $449.99 | Stock: 0 unidades [SIN STOCK]
-ID: 6 | Teclado Mecánico Logitech G Pro X | Precio: $129.99 | Stock: 25 unidades
