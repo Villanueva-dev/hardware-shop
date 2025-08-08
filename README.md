@@ -22,8 +22,8 @@ Un sistema completo de gestión de inventario desarrollado en Python para tienda
 
 1. **Clonar el repositorio**
    ```bash
-   git clone https://github.com/tu-usuario/proyecto-tienda.git
-   cd proyecto-tienda
+   git clone https://github.com/tu-usuario/hardware-shop.git
+   cd hardware-shop
    ```
 
 2. **Verificar instalación de Python**
@@ -33,22 +33,19 @@ Un sistema completo de gestión de inventario desarrollado en Python para tienda
 
 3. **Ejecutar el sistema**
    ```bash
-   python producto_crud.py
+   python main.py
    ```
 
 ## 📁 Estructura del Proyecto
 
 ```
-proyecto-tienda/
+hardware-shop/
 ├── README.md                 # Documentación principal
 ├── producto_crud.py          # Módulo principal del sistema
 ├── main.py                   # Archivo principal de ejecución
 ├── operaciones.log           # Archivo de logs (generado automáticamente)
-├── exports-txt/              # Carpeta de exportaciones (generada automáticamente)
-├── __pycache__/              # Cache de Python (ignorado por Git)
-├── uml/                      # Diagramas UML del proyecto
-│   └── final-project-m3.plantuml
-├── Contributors.md           # Lista de contribuidores
+├── repositorio.py            # Repository Pattern. Contrato que usará producto_crud.py
+├── Contributors.md           # Lista de contribuidores. Primeros pasos para nuevos
 └── .gitignore               # Archivos ignorados por Git
 ```
 
@@ -168,7 +165,6 @@ ID: 5 | Monitor Samsung Odyssey G7 27" | Precio: $449.99 | Stock: 0 unidades [SI
 - Seguir PEP 8 para Python
 - Documentar todas las funciones con docstrings
 - Incluir logging para operaciones importantes
-- Mantener cobertura de pruebas > 80%
 
 ## 📝 Registro de Cambios
 
