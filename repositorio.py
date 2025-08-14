@@ -31,3 +31,8 @@ class ProductoRepository(ABC):
     def delete(self, id_producto: int) -> bool:
         """Elimina un producto y devuelve True si tuvo éxito."""
         pass
+
+    @abstractmethod
+    def get_by_low_stock(self) -> List[Dict[str, Any]]:
+        """Muestra los productos con Stock bajo (< 5 unds)."""
+        pass

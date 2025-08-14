@@ -14,6 +14,11 @@ y este proyecto adhiere al [Versionado Semántico](https://semver.org/lang/es/).
 - Sistema de autenticación
 - API REST con FastAPI
 
+## [1.1.1] - 2025-08-14
+
+### ✨ Agregado
+- Función `get_by_low_stock()` para consultar los productos con stock bajo
+
 ## [1.1.0] - 2025-08-08
 
 ### 🔧 Cambiado

@@ -70,3 +70,17 @@ class InMemoryProductoRepository(ProductoRepository):
             return True
         logging.warning(f"Intento de eliminar producto no existente con ID: {id_producto}")
         return False
+
+    def get_by_low_stock(self) -> List[Dict[str, Any]]:
+        """Muestra los productos con Stock bajo (< 5 unds)."""
+        productos_stock_bajo = []
+        
+        for producto in _fake_db:
+            if producto.get("stock") <= 5:
+                productos_stock_bajo.append(producto)
+                logging.info(f"Producto con stock bajo: {producto}")
+                
+        if not productos_stock_bajo:
+            logging.info(f"No hay productos con 5 o menos unidades en stock.")
+            
+        return productos_stock_bajo
