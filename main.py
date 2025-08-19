@@ -17,7 +17,8 @@ def mostrar_menu():
     print("4. ✏️  Actualizar producto")
     print("5. 🗑️  Eliminar producto")
     print("6. 📄 Exportar inventario a archivo")
-    print("7. 🚪 Salir")
+    print("7. 🟡 Consultar productos con stock bajo.")
+    print("8. 🚪 Salir")
     print("="*50)
 
 def main():
@@ -153,8 +154,32 @@ def main():
                 print(f"✅ Productos exportados correctamente a {filepath}")
             except Exception as e:
                 print(f"❌ Error al exportar productos: {e}")
-
+                
         elif opcion == "7":
+            productos = repo.get_all()
+            
+            if not productos:
+                print("No hay productos en la base de datos.")
+            else:
+                productos_stock_bajo = repo.get_by_low_stock()
+                
+                if not productos_stock_bajo:
+                    print("🟡 CONSULTAR PRODUCTOS CON STOCK BAJO (<5 unidades)")
+                    print("-" * 60)
+                    print("\tNo hay productos con stock bajo 👌🏼")
+                else:
+                    print("🟡 CONSULTAR PRODUCTOS CON STOCK BAJO (<5 unidades)")
+                    print("-" * 60)
+                    for producto in productos_stock_bajo:
+                        estado_stock = ""
+                        if producto['stock'] == 0:
+                            estado_stock = "🔴 SIN STOCK"
+                        elif producto['stock'] <= 5:
+                            estado_stock = "🟡 STOCK BAJO"
+                        print(f"ID: {producto['id']} | {producto['nombre']} | Precio: ${producto['precio']} | Stock: {producto['stock']} | {estado_stock}")
+                    print("-" * 60)
+
+        elif opcion == "8":
             print("¡Gracias por usar el Sistema de Inventario!")
             print("🔒 Cerrando aplicación...")
             break
