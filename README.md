@@ -38,8 +38,7 @@ hardware-shop/
 ├── main.py                   # Capa de Presentación (Interfaz de Usuario)
 ├── producto_crud.py          # Capa de Acceso a Datos (Implementación del Repositorio)
 ├── repositorio.py            # Contrato del Repositorio (Interfaz Abstracta)
-├── operaciones.log           # Archivo de logs (generado automáticamente)
-├── .gitignore                # Archivos ignorados por Git
+├── postgres_repository.py            # Base de datos Postgres (Conexión y sentencias)
 └── README.md                 # Documentación del proyecto
 ```
 
@@ -58,22 +57,6 @@ Este proyecto utiliza el Patrón Repositorio para desacoplar la lógica de la ap
 
 Esta estructura permite que en el futuro podamos cambiar la fuente de datos (por ejemplo, a una base de datos SQLite) simplemente creando una nueva clase de repositorio, sin tener que modificar `main.py`.
 
-## 🤝 Contribuciones
-
-¡Las contribuciones son bienvenidas! Si eres un estudiante nuevo, aquí tienes algunas ideas para empezar:
-
-1.  **Mejorar la Interfaz:** Implementa una tabla mejor formateada para la lista de productos.
-2.  **Añadir Funcionalidad:** Crea una opción en el menú para ver solo los productos con stock bajo.
-3.  **Mejorar la Documentación:** Añade `docstrings` y `type hints` a las funciones en `main.py`.
-
-Consulta los issues abiertos en el repositorio para más ideas.
-
-| Estado | Indicador | Descripción |
-|--------|-----------|-------------|
-| Stock OK | 🟢 | Stock > 5 unidades |
-| Stock Bajo | 🟡 | Stock ≤ 5 unidades |
-| Sin Stock | 🔴 | Stock = 0 unidades |
-
 ## 📊 Sistema de Logging
 
 El sistema registra automáticamente todas las operaciones en `operaciones.log`:
@@ -88,18 +71,6 @@ El sistema registra automáticamente todas las operaciones en `operaciones.log`:
 2025-08-06 10:35:22 - WARNING - Intento de eliminar producto no existente con ID: 99
 2025-08-06 10:40:18 - INFO - Productos exportados exitosamente. Archivo: 'exports-txt/reporte.txt', Cantidad de productos: 6
 ```
-
-## 🎯 Datos de Ejemplo
-
-El sistema incluye 6 productos de hardware precargados:
-
-1. **NVIDIA RTX 4070** - $599.99 (12 unidades)
-2. **AMD Ryzen 7 7700X** - $349.99 (8 unidades)
-3. **Corsair Vengeance DDR5 32GB** - $199.99 (15 unidades)
-4. **ASUS ROG Strix B650-E** - $299.99 (3 unidades) ⚠️ Stock bajo
-5. **Monitor Samsung Odyssey G7 27"** - $449.99 (0 unidades) 🔴 Sin stock
-6. **Teclado Mecánico Logitech G Pro X** - $129.99 (25 unidades)
-
 ## 📤 Exportación de Reportes
 
 Los reportes se generan en la carpeta `exports-txt/` con el siguiente formato:
@@ -154,7 +125,7 @@ ID: 5 | Monitor Samsung Odyssey G7 27" | Precio: $449.99 | Stock: 0 unidades [SI
 
 ## 🗺️ Roadmap
 
-- [ ] Persistencia en base de datos
+- [x] Persistencia en base de datos
 - [ ] Interfaz gráfica (GUI)
 - [ ] Exportación en múltiples formatos (CSV, JSON, PDF)
 - [ ] Sistema de usuarios y roles

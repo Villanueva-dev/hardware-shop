@@ -1,4 +1,16 @@
 __pycache__/
 uml/
-exports-txt/
-operaciones.log
+exports-txt
+
+*.log
+*.pyc
+
+#Virtual Environment
+.venv/
+venv/
+env/
+ENV/
+
+# Enviroment variables
+.env
+.env.local
