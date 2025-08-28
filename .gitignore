@@ -1,4 +1,5 @@
 __pycache__/
 uml/
 exports-txt/
-operaciones.log
+operaciones.log/
+.env/

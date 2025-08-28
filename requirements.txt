@@ -6,4 +6,6 @@
 # os - Operaciones del sistema operativo (built-in)
 
 # Nota: El proyecto actualmente no requiere instalación de dependencias externas
+# Este archivo de momento puede estar vacío, 
 # ya que utiliza únicamente librerías estándar de Python.
+psycopg2-binary
