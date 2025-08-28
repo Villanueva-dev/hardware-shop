@@ -3,6 +3,7 @@ uml/
 exports-txt
 
 *.log
+*.pyc
 
 #Virtual Environment
 .venv/

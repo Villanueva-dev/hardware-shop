@@ -4,12 +4,7 @@ from typing import List, Dict, Any
 from repositorio import ProductoRepository
 import logging
 
-# --- Configuración del Logger ---
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    encoding='utf-8'
-)
+# La configuración del logger se realiza en el punto de entrada de la aplicación (main.py)
 
 class PostgresProductoRepository(ProductoRepository):
     """Implementación del repositorio de productos que usa una base de datos PostgreSQL."""
